@@ -1,8 +1,13 @@
+import type { GoogleSpreadsheetRow } from "google-spreadsheet"
+
 type TargetLanguageText = string
 type SupportLanguageText = string
 type CardID = number
-// stub type
-type Insertion = undefined
+
+interface Insert {
+  readonly row: GoogleSpreadsheetRow,
+  readonly id: CardID
+}
 
 interface Duo {
   readonly front: TargetLanguageText,

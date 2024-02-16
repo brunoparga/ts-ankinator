@@ -1,4 +1,7 @@
+import type { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
+
 import { createFlashcards } from "./anki";
+import type { AnkinatorReport } from "./ankinator";
 import { updateSpreadsheet } from "./google-sheets";
 import { generateReport } from "./report";
 import { setup } from "./setup";
@@ -12,11 +15,13 @@ function isWetRun(): boolean {
     return !process.argv.includes("--dry-run");
 }
 
-// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-function saveChanges(report: AnkinatorReport): void {
-    const insertions = createFlashcards(report)
+async function saveChanges(
+    sheet: GoogleSpreadsheetWorksheet,
+    report: AnkinatorReport,
+): Promise<void> {
+    const insertions = createFlashcards(report);
 
-    updateSpreadsheet(insertions)
+    await updateSpreadsheet(insertions);
 }
 
 // Synchronize between the Google Spreadsheet and Anki.
@@ -27,14 +32,15 @@ function saveChanges(report: AnkinatorReport): void {
 // A report is generated first, to describe what work needs to
 // be done. If the --dry-run CLI option is not set, the changes
 // are written both to Sheets and Anki.
-function main(): void {
+async function main(): Promise<void> {
     setup();
 
-    const report = generateReport();
+    const sheet = loadSpreadsheet();
+    const report: AnkinatorReport = generateReport(sheet);
 
     if (isWetRun()) {
-        saveChanges(report);
+        await saveChanges(sheet, report);
     }
 }
 
-main();
+await main();
