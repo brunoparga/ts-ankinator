@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import settings from "../data/settings.json";
 
 // Check if the VPN is off, as that prevents communication with

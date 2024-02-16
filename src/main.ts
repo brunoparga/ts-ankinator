@@ -1,10 +1,10 @@
 import type { GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 
-import { createFlashcards } from "./anki";
+import { createFlashcards } from "./anki.ts";
 import type { AnkinatorReport } from "./ankinator";
-import { updateSpreadsheet } from "./google-sheets";
-import { generateReport } from "./report";
-import { setup } from "./setup";
+import { loadSpreadsheet, updateSpreadsheet } from "./google-sheets.ts";
+import { generateReport } from "./report.ts";
+import { setup } from "./setup.ts";
 
 /* Main module */
 /* This module orchestrates the whole app. */
@@ -21,7 +21,8 @@ async function saveChanges(
 ): Promise<void> {
     const insertions = createFlashcards(report);
 
-    await updateSpreadsheet(insertions);
+    await updateSpreadsheet(sheet, insertions);
+    await sheet.saveUpdatedCells();
 }
 
 // Synchronize between the Google Spreadsheet and Anki.
@@ -35,7 +36,7 @@ async function saveChanges(
 async function main(): Promise<void> {
     setup();
 
-    const sheet = loadSpreadsheet();
+    const sheet = await loadSpreadsheet();
     const report: AnkinatorReport = generateReport(sheet);
 
     if (isWetRun()) {

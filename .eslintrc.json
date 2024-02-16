@@ -26,6 +26,7 @@
         ]
       }
     ],
+    "import/extensions": ["error", "always"],
     "n/no-missing-import": "off",
     "n/file-extension-in-import": "off",
     "prettier/prettier": [
