@@ -1,27 +1,29 @@
 type TargetLanguageText = string
 type SupportLanguageText = string
-type cardID = number
+type CardID = number
+// stub type
+type Insertion = undefined
 
 interface Duo {
-  front: TargetLanguageText,
-  back: SupportLanguageText
+  readonly front: TargetLanguageText,
+  readonly back: SupportLanguageText
 }
 
 interface Trio extends Duo {
-  ID: cardID
+  readonly id: CardID
 }
 
 type MismatchError = {
-  sheetRow: Trio,
-  flashcard: Trio
+  readonly sheetRow: Trio,
+  readonly flashcard: Trio
 }
 
 type AnkinatorReport = {
-  totalSheetRows: number,
-  totalFlashcards: number,
-  perfectMatches: number,
-  sheetNeedsId: Array<Duo>,
-  divergentEntries: Array<Trio>,
-  deckNeedsCard: Array<Duo>,
-  errors: Array<MismatchError>
+  readonly totalSheetRows: number,
+  readonly totalFlashcards: number,
+  readonly perfectMatches: number,
+  readonly sheetNeedsId: readonly Duo[],
+  readonly divergentEntries: readonly Trio[],
+  readonly deckNeedsCard: readonly Duo[],
+  readonly errors: readonly MismatchError[]
 }

@@ -5,12 +5,12 @@
 
 export function generateReport(): AnkinatorReport {
   return {
-  totalSheetRows: 0,
-  totalFlashcards: 0,
-  perfectMatches: 0,
-  sheetNeedsId: [],
-  divergentEntries: [],
-  deckNeedsCard: [],
-  errors: []
-}
+    deckNeedsCard: [],
+    divergentEntries: [],
+    errors: [],
+    perfectMatches: 0,
+    sheetNeedsId: [],
+    totalFlashcards: 0,
+    totalSheetRows: 0
+  }
 }

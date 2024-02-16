@@ -1,46 +1,22 @@
+import { createFlashcards } from "./anki";
+import { updateSpreadsheet } from "./google-sheets";
 import { generateReport } from "./report";
-
-import settings from "../data/settings.json"
+import { setup } from "./setup";
 
 /* Main module */
 /* This module orchestrates the whole app. */
 
-// Check if the VPN is off, as that prevents communication with
-// the Spreadsheets API. If it is on, an attempt is made to turn
-// it off and everything crashes if that attempt fails.
-function isTheVpnOff() {
-    // stub
-}
-
-// Check if Anki is running, so that its API can receive calls.
-// If it isn't, an attempt is made to start it and everything
-// crashes if that attempt fails.
-function isAnkiRunning() {
-    // stub
-}
-
-// Check if the latest sync happened less than 12 hours ago.
-// Sync can be forced with the CLI option --force.
-function validateRecency() {
-    if (process.argv.includes('--force')) return true;
-    const now = Date.now();
-    const last_updated = Date.parse(settings.last_updated);
-    return now - (12 * 60 * 60 * 1000) > last_updated;
-}
-
-// Set up conditions for the sync to work
-function setup() {
-    isAnkiRunning()
-    isTheVpnOff()
-    validateRecency()
-}
-
+// Determine if this is a dry or wet run, to save on API hits.
 function isWetRun(): boolean {
-    return !process.argv.includes("--dry-run")
+    // eslint-disable-next-line sonar/process-argv
+    return !process.argv.includes("--dry-run");
 }
 
+// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 function saveChanges(report: AnkinatorReport): void {
+    const insertions = createFlashcards(report)
 
+    updateSpreadsheet(insertions)
 }
 
 // Synchronize between the Google Spreadsheet and Anki.
@@ -52,14 +28,13 @@ function saveChanges(report: AnkinatorReport): void {
 // be done. If the --dry-run CLI option is not set, the changes
 // are written both to Sheets and Anki.
 function main(): void {
-    setup()
+    setup();
 
-    const report = generateReport()
+    const report = generateReport();
 
     if (isWetRun()) {
-        saveChanges(report)
+        saveChanges(report);
     }
 }
 
 main();
-

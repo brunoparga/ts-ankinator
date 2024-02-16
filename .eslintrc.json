@@ -15,8 +15,6 @@
         "project": true
     },
     "rules": {
-        "n/no-missing-import": [
-            "never"
-        ]
+        "n/no-missing-import": "off"
     }
 }
