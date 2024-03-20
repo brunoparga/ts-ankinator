@@ -1,5 +1,7 @@
 # ankinator
 
+This repository is an early incarnation of an app to connect a Google Spreadsheet to an Anki deck. The project now runs on Elixir and Gleam, so this repo is archived.
+
 To install dependencies:
 
 ```bash
